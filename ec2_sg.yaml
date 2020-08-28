@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  MySG:
+    Type: AWS::EC2::SecurityGroup 
+    Properties: 
+      GroupDescription: "CloudFormationSG"
+      GroupName: "CloudFormation"
+      VpcId: "" # vpcid
+      SecurityGroupIngress: 
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+        Description: port http
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+        Description: port ssh
+
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    DependsOn: MySG
+    Properties:
+      ImageId: ami-02354e95b39ca8dec
+      InstanceType: t2.micro
+      KeyName: mac
+      SecurityGroups:
+      - CloudFormation
+      Tags: 
+      - Key: Name
+        Value: MyInstance 
+      - Key: Team
+        Value: DevOps
+      - Key: Env
+        Value: Dev
